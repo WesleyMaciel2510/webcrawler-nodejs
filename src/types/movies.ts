@@ -1,15 +1,17 @@
 export interface Movie {
   title: string;
   release_date: string;
-  rating?: string;
-  director?: string;
-  crawled_at: string;
+  url?: string | null;
 }
 
 export interface MovieResponse {
   success: boolean;
   count: number;
-  data: Movie[];
+  total: number;
+  page: number;
+  resPerPage: number;
+  totalPages: number;
+  data: any[];
 }
 
 export interface ErrorResponse {

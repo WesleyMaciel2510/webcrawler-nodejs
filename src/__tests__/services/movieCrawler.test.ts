@@ -1,6 +1,5 @@
-// src/tests/movieCrawler.test.ts
 import { describe, it, expect } from "@jest/globals";
-import { MovieCrawlerService } from "../services/movieCrawler";
+import { MovieCrawlerService } from "../../services/movieCrawler";
 
 describe("MovieCrawlerService", () => {
   it("should fetch movies", async () => {
