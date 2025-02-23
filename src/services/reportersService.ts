@@ -6,14 +6,14 @@ dotenv.config();
 const ELASTIC_URL = process.env.ELASTIC_URL as string;
 const ELASTIC_TOKEN = process.env.ELASTIC_TOKEN as string;
 
-export class RelatoresService {
-  public async getRelatores(): Promise<string[]> {
+export class ReportersService {
+  public async getReporters(): Promise<string[]> {
     try {
       const response = await axios.post(
         ELASTIC_URL,
         {
           size: 1000,
-          _source: ["relator"], // Pegando apenas o campo "relator"
+          _source: ["reporter"], // Pegando apenas o campo "reporter"
           query: {
             match_all: {}, // Retorna todos os documentos
           },
@@ -27,15 +27,15 @@ export class RelatoresService {
       );
 
       const hits = response.data.hits.hits;
-      const relatores: string[] = hits.map(
-        (hit: any) => hit._source.relator as string
+      const reporters: string[] = hits.map(
+        (hit: any) => hit._source.reporter as string // Extraindo o valor do campo "reporter"
       );
 
       // Remover duplicatas e ordenar
-      return [...new Set(relatores)].sort();
+      return [...new Set(reporters)].sort();
     } catch (error) {
-      //console.error("Erro ao buscar relatores:", error);
-      throw new Error("Erro ao buscar relatores");
+      //console.error("Erro ao buscar reporters:", error);
+      throw new Error("Erro ao buscar reporters");
     }
   }
 }
