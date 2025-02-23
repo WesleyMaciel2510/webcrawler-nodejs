@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { movieController } from "../controller/movieController";
-import { reportersController } from "../controller/reportersController";
-import { documentsController } from "../controller/documentsController";
+import { movieController } from "../controller/movieController.js";
+import { reportersController } from "../controller/reportersController.js";
+import { documentsController } from "../controller/documentsController.js";
 
 const router = Router();
 
@@ -14,5 +14,6 @@ router.get("/reporters", reportersController.getReporters);
 
 // Rotas relacionadas a busca de Documentos no Elastic Search
 router.get("/documents", documentsController.searchDocuments);
+router.get("/documents/histogram", documentsController.createHistogram);
 
 export default router;

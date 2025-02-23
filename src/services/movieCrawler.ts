@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { Movie } from "../types/movies";
+import { Movie } from "../types/movies.js";
 
 export class MovieCrawlerService {
   private readonly baseUrl =

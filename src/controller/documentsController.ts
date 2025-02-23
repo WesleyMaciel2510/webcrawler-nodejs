@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { DocumentsService } from "../services/documentsService";
+import { DocumentsService } from "../services/documentsService.js";
 
 export class DocumentsController {
   private documentService: DocumentsService;
@@ -34,6 +34,35 @@ export class DocumentsController {
       res.status(500).json({
         success: false,
         error: `Failed to search documents: ${(error as Error).message}`,
+      });
+    }
+  };
+
+  public createHistogram = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    try {
+      const { searchTerm } = req.query;
+
+      if (!searchTerm || typeof searchTerm !== "string") {
+        res.status(400).json({
+          success: false,
+          error: "Missing or invalid 'searchTerm' query parameter",
+        });
+        return;
+      }
+
+      await this.documentService.createHistogram(searchTerm);
+
+      res.json({
+        success: true,
+        message: "Histogram created successfully.",
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: `Failed to create histogram: ${(error as Error).message}`,
       });
     }
   };
