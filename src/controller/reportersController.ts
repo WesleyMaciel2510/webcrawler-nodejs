@@ -16,10 +16,10 @@ export class ReportersController {
         count: reporters.length,
         data: reporters,
       });
-    } catch (error) {
+    } catch (error: any) {
       res.status(500).json({
         success: false,
-        error: "Error fetching reporters",
+        error: `Error fetching reporters: ${error.message}`,	
       });
     }
   };
