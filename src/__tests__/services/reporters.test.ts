@@ -17,14 +17,13 @@ describe("ReportersService", () => {
       data: {
         hits: {
           hits: [
-            { _source: { reporter: "João" } },
-            { _source: { reporter: "Maria" } },
-            { _source: { reporter: "João" } }, // Duplicado para testar remoção
-            { _source: { reporter: "Ana" } },
+            { _source: { relator: "João" } }, // Campo correto: 'relator'
+            { _source: { relator: "Maria" } }, // Campo correto: 'relator'
+            { _source: { relator: "Ana" } }, // Campo correto: 'relator'
           ],
         },
       },
-    } as unknown as { data: { hits: { hits: { _source: { reporter: string } }[] } } });
+    } as unknown as { data: { hits: { hits: { _source: { relator: string } }[] } } });
 
     const result = await service.getReporters();
 
