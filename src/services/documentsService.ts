@@ -3,39 +3,50 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const ELASTIC_URL = process.env.ELASTIC_URL as string;
 const ELASTIC_TOKEN = process.env.ELASTIC_TOKEN as string;
-const INDEX = "search-juris-tst";
+const ELASTIC_DOCUMENTS_URL = process.env.ELASTIC_DOCUMENTS_URL as string;
 
 export class DocumentsService {
   public async searchDocuments(term: string): Promise<any[]> {
     try {
+      // Fazendo uma requisição POST para o Elasticsearch
       const response = await axios.post(
-        ELASTIC_URL,
+        ELASTIC_DOCUMENTS_URL, // Usando a URL completa do .env
         {
-          size: 10, // Limit to 10 results
-          _source: ["ementa", "data_julgamento"], // Fetch only relevant fields
+          size: 10, // Limitar a 10 resultados
+          _source: ["ementa", "data_julgamento"], // Buscar apenas os campos relevantes
           query: {
-            match: { ementa: term }, // Search by ementa
+            match: { ementa: term }, // Buscar por "ementa"
           },
-          sort: [{ data_julgamento: { order: "desc" } }], // Sort by most recent
+          sort: [{ data_julgamento: { order: "desc" } }], // Ordenar por data_julgamento (mais recente primeiro)
         },
         {
           headers: {
-            Authorization: `ApiKey ${ELASTIC_TOKEN}`,
-            "Content-Type": "application/json",
+            Authorization: `ApiKey ${ELASTIC_TOKEN}`, // Token de autenticação
+            "Content-Type": "application/json", // Definir o tipo de conteúdo como JSON
           },
         }
       );
 
+      // Verificando se a resposta contém dados
       const hits = response.data.hits.hits;
-      return hits.map((hit: any) => ({
+
+      if (!hits || hits.length === 0) {
+        console.log("Nenhum documento encontrado.");
+        return []; // Retorna um array vazio se não houver resultados
+      }
+
+      // Mapeando os resultados para extrair os campos relevantes
+      const documents = hits.map((hit: any) => ({
         ementa: hit._source.ementa,
         data_julgamento: hit._source.data_julgamento,
       }));
-    } catch (error) {
-      console.error("Error fetching documents:", error);
-      throw new Error("Failed to fetch documents");
+
+      console.log("Documentos encontrados:", documents); // Log para depuração
+      return documents; // Retorna a lista de documentos
+    } catch (error: any) {
+      console.error("Erro ao buscar documentos:", error.response?.data || error.message);
+      throw new Error(`Erro ao buscar documentos: ${error.response?.data || error.message}`);
     }
   }
 }

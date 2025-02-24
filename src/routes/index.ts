@@ -13,6 +13,6 @@ router.get("/movies/searchByName", movieController.getMoviesByName);
 router.get("/reporters", reportersController.getReporters);
 
 // Rotas relacionadas a busca de Documentos no Elastic Search
-router.get("/documents", documentsController.searchDocuments);
+router.post("/documents", documentsController.searchDocuments);
 
 export default router;
